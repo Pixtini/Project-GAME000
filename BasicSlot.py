@@ -29,7 +29,9 @@ class Main:
     def sim(self):
         for i in range(self.report.spinCount):  
             self.spin()
+            if i % (self.report.spinCount/10) == 0:
+                print(f"{i / (self.report.spinCount/10) }")
         self.report.reportPrint()
     
-main = Main(1000, config)
+main = Main(100_000_000, config)
 main.sim()
