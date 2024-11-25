@@ -8,26 +8,15 @@ class Reels:
         reels: The Reels of the slot game
     '''
     def __init__(self, reels):
-        '''
-        Inits Reels with reels
-        '''
         self.reels = reels
-    
+ 
+
+
 class Viewport:
-    def __init__(self, reels):
+    def __init__(self, reels, screenSize, reelstops):
         self.reels = reels
+        self.viewport = [[self.reels[i][reelstops[i]+j] for j in range(screenSize[1])] for i in range(screenSize[0])] 
 
-    def viewPortLooker(self, reelstops):
-        '''
-        Creates the viewport
-
-        Args:
-            reelstops: Where each reel stops , should be random most of the time
-        
-        Returns: 
-            5x3 Array that is the viewport
-        '''
-        return [[self.reels[i][reelstops[i]+j] for j in range(3)] for i in range(5)]   
 
 class SlotGame:
     ''' Slot game class
@@ -42,9 +31,6 @@ class SlotGame:
     '''
 
     def __init__(self, viewPort, paytable, winlines):
-        '''
-        Inits Reels with viewport, paytable, winlines
-        '''
         self.viewPort, self.paytable, self.winlines = viewPort, paytable, winlines 
 
     def viewPortToWinlines(self):
@@ -63,7 +49,7 @@ class SlotGame:
         Args:
             currentWinline: Array of the winline
         
-        Returns: 
+        Return: 
             Position on Paytable that is the largest win detected on that winline, [0,3] if no win
         ''' 
         payout = [0,3]
@@ -101,7 +87,7 @@ class SlotGame:
             Array of all the valid win positions
         ''' 
         return [self.checkForWin(winline) for winline in allWinlines if self.checkForWin(winline)[1] != 3 ]
-
+        
     def retrievePayouts(self, payouts):
         '''
         Collects Payouts
@@ -138,6 +124,8 @@ class SlotGame:
         totalPay = self.retrievePayouts(payouts)
         return totalPay
 
+
+
 class Spin:  
     ''' Spin class, performs the RNG for that spin
 
@@ -149,9 +137,6 @@ class Spin:
         winlines:
     '''
     def __init__(self, reels, paytable, winlines):
-        '''
-        Inits Reels with viewport, paytable, winlines
-        '''
         self.reels, self.paytable, self.winlines = reels, paytable, winlines
         self.viewPortInstance = []
         self.randomReelStops = [random.randint(0,len(self.reels[i])-3) for i in range(5)]
@@ -163,13 +148,14 @@ class Spin:
         Returns: 
            2D Array of the Viewport Instance
         ''' 
-        viewport = Viewport(self.reels)
-        self.viewPortInstance = viewport.viewPortLooker(self.randomReelStops)
+        viewport = Viewport(self.reels,[5,3],self.randomReelStops)
+        self.viewPortInstance = viewport.viewport
         return self.viewPortInstance
     
     def spin(self):
         self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
         self.totalPay = self.slotGame.winInstance()
+
 
 
 class BaseGame(Spin):
@@ -180,6 +166,8 @@ class BaseGame(Spin):
     def baseSpin(self):
         super().spin()
         self.freeSpinFlag = self.slotGame.freeSpinCheck()
+
+
 
 class FreeGame(Spin):
     def __init__(self, reels, paytable, winlines):

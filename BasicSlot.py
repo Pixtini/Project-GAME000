@@ -33,5 +33,5 @@ class Main:
                 print(f"{i / (self.report.spinCount/10) }")
         self.report.reportPrint()
     
-main = Main(1000, config)
+main = Main(10000, config)
 main.sim()
