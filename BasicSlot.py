@@ -13,8 +13,11 @@ for i in range(report.spinCount):
     baseSpin = BaseGame(slotData.baseReels, slotData.paytable, slotData.winlines)
     if baseSpin.freeSpinFlag:
         freeSpin = FreeGame(slotData.freeReels, slotData.paytable, slotData.winlines)
+        freeSpin.freeSpins(5000)
         report.log(baseSpin.totalPay, freeSpin.totalPay, baseSpin.freeSpinFlag)
     else:
         report.log(baseSpin.totalPay, 0, baseSpin.freeSpinFlag)
+
+
 
 report.reportPrint()
