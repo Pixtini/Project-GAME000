@@ -3,21 +3,27 @@ from Reports import *
 from SlotLogic import *
 from SlotData import *
 
-config = "/Users/connorkelly/Documents/Work/Python/SlotGame/BasicSlot.xlsx"
-slotData = SlotData(config)
-slotData.importData()
+config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"  
 
-report = Report(10000)
+class Main:
+    def __init__(self, spinCount, config):
+        self.slotData = SlotData(config)
+        self.slotData.importData()
+        self.report = Report(spinCount)
 
-for i in range(report.spinCount):  
-    baseSpin = BaseGame(slotData.baseReels, slotData.paytable, slotData.winlines)
-    if baseSpin.freeSpinFlag:
-        freeSpin = FreeGame(slotData.freeReels, slotData.paytable, slotData.winlines)
-        freeSpin.freeSpins(5000)
-        report.log(baseSpin.totalPay, freeSpin.totalPay, baseSpin.freeSpinFlag)
-    else:
-        report.log(baseSpin.totalPay, 0, baseSpin.freeSpinFlag)
+    def spin(self): 
+        baseSpin = BaseGame(self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines)
+        if baseSpin.freeSpinFlag:
+            freeSpin = FreeGame(self.slotData.freeReels, self.slotData.paytable, self.slotData.winlines)
+            freeSpin.freeSpins(int(self.slotData.freeSpinCount))
+            self.report.log(baseSpin.totalPay, freeSpin.totalPay, baseSpin.freeSpinFlag)
+        else:
+            self.report.log(baseSpin.totalPay, 0, baseSpin.freeSpinFlag)      
 
-
-
-report.reportPrint()
+    def sim(self):
+        for i in range(self.report.spinCount):  
+            self.spin()
+        self.report.reportPrint()
+    
+main = Main(1000, config)
+main.sim()

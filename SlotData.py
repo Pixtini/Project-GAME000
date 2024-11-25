@@ -23,8 +23,15 @@ class SlotData:
         paytableImport = pd.read_excel(self.config, 'Paytable' ,nrows = 10, usecols=[0,1,2])
         return paytableImport.values.tolist()
     
+    def freeSpinCountImport(self):
+        paytableImport = pd.read_excel(self.config, 'Paytable' ,nrows = 10, usecols=[5])
+        print(paytableImport.values.tolist()[-1][0])
+        return paytableImport.values.tolist()[-1][0]
+    
     def importData(self):
         self.baseReels = self.reelImport('BaseReels')
         self.freeReels = self.reelImport('FreeReels')
         self.winlines = self.winlineImport()
         self.paytable = self.paytableImport()
+        self.freeSpinCount = self.freeSpinCountImport()
+
