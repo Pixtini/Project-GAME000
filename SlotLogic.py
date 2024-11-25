@@ -180,6 +180,11 @@ class Spin:
         viewport = Viewport(self.reels)
         self.viewPortInstance = viewport.viewPortLooker(self.randomReelStops)
         return self.viewPortInstance
+    
+    def spin(self):
+        self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
+        self.totalPay = self.slotGame.winInstance()
+
 
 class BaseGame(Spin):
     def __init__(self, reels, paytable, winlines):
@@ -187,8 +192,7 @@ class BaseGame(Spin):
         self.viewPortInstance = self.performSpin()
     
     def baseSpin(self):
-        self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
-        self.totalPay = self.slotGame.winInstance()
+        super().spin()
         self.freeSpinFlag = self.slotGame.freeSpinCheck()
 
 class FreeGame(Spin):
@@ -197,7 +201,6 @@ class FreeGame(Spin):
         self.viewPortInstance = self.performSpin()
 
     def freeSpin(self):
-        self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
-        self.totalPay = self.slotGame.winInstance()
+        super().spin()
 
     
