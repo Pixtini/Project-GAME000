@@ -24,6 +24,22 @@ class Reels:
             5x3 Array that is the viewport
         '''
         return [[self.reels[i][reelstops[i]+j] for j in range(3)] for i in range(5)]
+    
+class Viewport:
+    def __init__(self, reels):
+        self.reels = reels
+
+    def viewPortLooker(self, reelstops):
+        '''
+        Creates the viewport
+
+        Args:
+            reelstops: Where each reel stops , should be random most of the time
+        
+        Returns: 
+            5x3 Array that is the viewport
+        '''
+        return [[self.reels[i][reelstops[i]+j] for j in range(3)] for i in range(5)]   
 
 class SlotGame:
     ''' Slot game class
@@ -161,8 +177,8 @@ class Spin:
         Returns: 
            2D Array of the Viewport Instance
         ''' 
-        gameReels = Reels(self.reels)
-        self.viewPortInstance = gameReels.viewPortLooker(self.randomReelStops)
+        viewport = Viewport(self.reels)
+        self.viewPortInstance = viewport.viewPortLooker(self.randomReelStops)
         return self.viewPortInstance
 
 class BaseGame(Spin):
