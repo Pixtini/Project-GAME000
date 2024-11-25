@@ -13,17 +13,7 @@ class Reels:
         '''
         self.reels = reels
 
-    def viewPortLooker(self, reelstops):
-        '''
-        Creates the viewport
 
-        Args:
-            reelstops: Where each reel stops , should be random most of the time
-        
-        Returns: 
-            5x3 Array that is the viewport
-        '''
-        return [[self.reels[i][reelstops[i]+j] for j in range(3)] for i in range(5)]
     
 class Viewport:
     def __init__(self, reels):
