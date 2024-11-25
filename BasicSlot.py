@@ -13,10 +13,16 @@ class Main:
 
     def spin(self): 
         baseSpin = BaseGame(self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines)
+        #Viewport Can Be edited here
+        baseSpin.baseSpin()
         if baseSpin.freeSpinFlag:
-            freeSpin = FreeGame(self.slotData.freeReels, self.slotData.paytable, self.slotData.winlines)
-            freeSpin.freeSpins(int(self.slotData.freeSpinCount))
-            self.report.log(baseSpin.totalPay, freeSpin.totalPay, baseSpin.freeSpinFlag)
+            freeSpinPay = 0
+            for _ in range(int(self.slotData.freeSpinCount)):
+                freeSpin = FreeGame(self.slotData.freeReels, self.slotData.paytable, self.slotData.winlines)
+                #Viewport Can Be edited here
+                freeSpin.freeSpin()
+                freeSpinPay += freeSpin.totalPay
+            self.report.log(baseSpin.totalPay, freeSpinPay, baseSpin.freeSpinFlag)
         else:
             self.report.log(baseSpin.totalPay, 0, baseSpin.freeSpinFlag)      
 

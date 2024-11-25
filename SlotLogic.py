@@ -185,6 +185,8 @@ class BaseGame(Spin):
     def __init__(self, reels, paytable, winlines):
         super().__init__(reels, paytable, winlines)
         self.viewPortInstance = self.performSpin()
+    
+    def baseSpin(self):
         self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
         self.totalPay = self.slotGame.winInstance()
         self.freeSpinFlag = self.slotGame.freeSpinCheck()
@@ -192,12 +194,10 @@ class BaseGame(Spin):
 class FreeGame(Spin):
     def __init__(self, reels, paytable, winlines):
         super().__init__(reels, paytable, winlines)
-        self.totalPay = 0
+        self.viewPortInstance = self.performSpin()
 
-    def freeSpins(self, freeSpinCount):
-        for _ in range(freeSpinCount):
-            self.viewPortInstance = self.performSpin()
-            self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
-            self.totalPay += self.slotGame.winInstance()
+    def freeSpin(self):
+        self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
+        self.totalPay = self.slotGame.winInstance()
 
     
