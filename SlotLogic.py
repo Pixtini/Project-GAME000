@@ -12,8 +12,6 @@ class Reels:
         Inits Reels with reels
         '''
         self.reels = reels
-
-
     
 class Viewport:
     def __init__(self, reels):
@@ -150,8 +148,6 @@ class Spin:
         paytable:
         winlines:
     '''
-
-
     def __init__(self, reels, paytable, winlines):
         '''
         Inits Reels with viewport, paytable, winlines
