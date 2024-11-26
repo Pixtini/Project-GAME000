@@ -23,9 +23,11 @@ class FreeGame(Spin):
         super().__init__()
 
     def freeSpin(self):
-        super().spin()
-        super().winprocess(self.viewport.viewport)
-        self.totalPay = self.slotGame.totalPayout
+        self.totalFreePay = 0
+        for _ in range(int(self.slotData.freeSpinCount)):
+            super().spin()
+            super().winprocess(self.viewport.viewport)
+            self.totalFreePay += self.slotGame.totalPayout
 
 class Main:
     def __init__(self, spinCount, config):
@@ -40,13 +42,8 @@ class Main:
         self.baseSpin.baseSpin()
         
         if self.baseSpin.freeSpinFlag:
-            freeSpinPay = 0
-            
-            for _ in range(int(self.slotData.freeSpinCount)):
-                self.freeSpin.freeSpin()
-                freeSpinPay += self.freeSpin.totalPay
-            
-            self.report.log(self.baseSpin.totalPay, freeSpinPay, self.baseSpin.freeSpinFlag)
+            self.freeSpin.freeSpin()
+            self.report.log(self.baseSpin.totalPay, self.freeSpin.totalFreePay, self.baseSpin.freeSpinFlag)
         else:
             self.report.log(self.baseSpin.totalPay, 0, self.baseSpin.freeSpinFlag)      
 
