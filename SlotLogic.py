@@ -18,6 +18,8 @@ class SlotGame:
         self.viewPort, self.paytable, self.winlines = viewPort, paytable, winlines 
         # Maps each winline to the current viewport
         self.winlineSymbols = [[self.viewPort[j][self.winlines[i][j]] for j in range(5)] for i in range(len(self.winlines))]
+        self.freeGameCheck = (sum([reel.count(9) for reel in self.viewPort]) == 3)
+
         self.payouts = []
     
     def checkForWins(self):
@@ -71,12 +73,6 @@ class SlotGame:
             totalPayout += self.paytable[payout[0]][payout[1]]
         return totalPayout
     
-    def freeSpinCheck(self):
-        '''
-        Returns Boolean based on wether free spins or not
-        ''' 
-        return (sum([reel.count(9) for reel in self.viewPort]) == 3)
-    
     def winInstance(self):
         '''
         Brings everything togethor, takes viewport and performs all steps
@@ -127,7 +123,7 @@ class BaseGame(Spin):
     
     def baseSpin(self):
         super().spin()
-        self.freeSpinFlag = self.slotGame.freeSpinCheck()
+        self.freeSpinFlag = self.slotGame.freeGameCheck
 
 
 
