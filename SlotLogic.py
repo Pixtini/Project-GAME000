@@ -56,6 +56,7 @@ class SlotGame:
                 self.payouts.append(payout)
                 self.totalPayout += self.paytable[payout[0]][payout[1]]
 
+
 class Spin:  
     def __init__(self, reels, paytable, winlines):
         self.reels, self.paytable, self.winlines = reels, paytable, winlines
@@ -63,23 +64,11 @@ class Spin:
     def spin(self):
         self.randomReelStops = [random.randint(0,len(self.reels[i])-3) for i in range(5)]
         self.viewport = Viewport(self.reels,[5,3],self.randomReelStops)
-        self.slotGame = SlotGame(self.viewport.viewport, self.paytable, self.winlines)
-        self.slotGame.checkForWins()
-        self.totalPay = self.slotGame.totalPayout
-
-class BaseGame(Spin):
-    def __init__(self, reels, paytable, winlines):
-        super().__init__(reels, paytable, winlines)
     
-    def baseSpin(self):
-        super().spin()
-        self.freeSpinFlag = self.slotGame.freeGameCheck
+    def winprocess(self, viewport):
+        self.slotGame = SlotGame(viewport, self.paytable, self.winlines)
+        self.slotGame.checkForWins()
 
-class FreeGame(Spin):
-    def __init__(self, reels, paytable, winlines):
-        super().__init__(reels, paytable, winlines)
 
-    def freeSpin(self):
-        super().spin()
 
     

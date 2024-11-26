@@ -5,6 +5,27 @@ from SlotData import *
 
 config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"  
 
+class BaseGame(Spin):
+    def __init__(self, reels, paytable, winlines):
+        super().__init__(reels, paytable, winlines)
+    
+    def baseSpin(self):
+        super().spin()
+        #viewport can be edited here
+        super().winprocess(self.viewport.viewport)
+        #payout can be modified here incase of multi etc
+        self.totalPay = self.slotGame.totalPayout
+        self.freeSpinFlag = self.slotGame.freeGameCheck
+
+class FreeGame(Spin):
+    def __init__(self, reels, paytable, winlines):
+        super().__init__(reels, paytable, winlines)
+
+    def freeSpin(self):
+        super().spin()
+        super().winprocess(self.viewport.viewport)
+        self.totalPay = self.slotGame.totalPayout
+
 class Main:
     def __init__(self, spinCount, config):
         self.slotData = SlotData(config)
@@ -14,14 +35,16 @@ class Main:
         self.freeSpin = FreeGame(self.slotData.freeReels, self.slotData.paytable, self.slotData.winlines)
 
     def spin(self): 
-        #Viewport Can Be edited here
+
         self.baseSpin.baseSpin()
+        
         if self.baseSpin.freeSpinFlag:
             freeSpinPay = 0
+            
             for _ in range(int(self.slotData.freeSpinCount)):
-                #Viewport Can Be edited here
                 self.freeSpin.freeSpin()
                 freeSpinPay += self.freeSpin.totalPay
+            
             self.report.log(self.baseSpin.totalPay, freeSpinPay, self.baseSpin.freeSpinFlag)
         else:
             self.report.log(self.baseSpin.totalPay, 0, self.baseSpin.freeSpinFlag)      
