@@ -6,20 +6,21 @@ from SlotData import *
 config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"  
 
 class BaseGame(Spin):
-    def __init__(self, reels, paytable, winlines):
-        super().__init__(reels, paytable, winlines)
+    def __init__(self):
+        super().__init__()
     
     def baseSpin(self):
         super().spin()
         #viewport can be edited here
+        
         super().winprocess(self.viewport.viewport)
         #payout can be modified here incase of multi etc
         self.totalPay = self.slotGame.totalPayout
         self.freeSpinFlag = self.slotGame.freeGameCheck
 
 class FreeGame(Spin):
-    def __init__(self, reels, paytable, winlines):
-        super().__init__(reels, paytable, winlines)
+    def __init__(self):
+        super().__init__()
 
     def freeSpin(self):
         super().spin()
@@ -31,8 +32,8 @@ class Main:
         self.slotData = SlotData(config)
         self.slotData.importData()
         self.report = Report(spinCount)
-        self.baseSpin = BaseGame(self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines)
-        self.freeSpin = FreeGame(self.slotData.freeReels, self.slotData.paytable, self.slotData.winlines)
+        self.baseSpin = BaseGame()
+        self.freeSpin = FreeGame()
 
     def spin(self): 
 
@@ -56,5 +57,5 @@ class Main:
                 print(f"{i / (self.report.spinCount/10) }")
         self.report.reportPrint()
     
-main = Main(10000, config)
+main = Main(1000000, config)
 main.sim()

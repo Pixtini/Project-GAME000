@@ -25,7 +25,6 @@ class SlotData:
     
     def freeSpinCountImport(self):
         paytableImport = pd.read_excel(self.config, 'Paytable' ,nrows = 10, usecols=[5])
-        print(paytableImport.values.tolist()[-1][0])
         return paytableImport.values.tolist()[-1][0]
     
     def importData(self):

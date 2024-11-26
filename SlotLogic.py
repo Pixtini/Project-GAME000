@@ -1,5 +1,7 @@
 import random
 from Reports import Report
+from SlotData import *
+config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"  
 
 class Reels:
     def __init__(self, reels):
@@ -58,8 +60,11 @@ class SlotGame:
 
 
 class Spin:  
-    def __init__(self, reels, paytable, winlines):
-        self.reels, self.paytable, self.winlines = reels, paytable, winlines
+    def __init__(self):
+        self.slotData = SlotData(config)
+        self.slotData.importData()
+        self.reels, self.paytable, self.winlines = self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines
+
     
     def spin(self):
         self.randomReelStops = [random.randint(0,len(self.reels[i])-3) for i in range(5)]
