@@ -2,45 +2,22 @@ import random
 from Reports import Report
 
 class Reels:
-    ''' Reel Data and Creates ViewPort
-
-    Attributes:
-        reels: The Reels of the slot game
-    '''
     def __init__(self, reels):
         self.reels = reels
  
 
-
 class Viewport:
     def __init__(self, reels, screenSize, reelstops):
         self.reels = reels
+        #Viewport object, based on where reels stopped and screen size, can be edited later based on features.
         self.viewport = [[self.reels[i][reelstops[i]+j] for j in range(screenSize[1])] for i in range(screenSize[0])] 
 
 
 class SlotGame:
-    ''' Slot game class
-
-    Takes the viewport, and translates it to the winlines, checks for wins and free spins
-
-    Attributes:
-        viewPort:
-        paytable:
-        winlines:
-
-    '''
-
     def __init__(self, viewPort, paytable, winlines):
         self.viewPort, self.paytable, self.winlines = viewPort, paytable, winlines 
-
-    def viewPortToWinlines(self):
-        '''
-        Translates viewport to the winlines
-        
-        Returns: 
-            Array that has each winline from the viewport
-        '''
-        return [[self.viewPort[j][self.winlines[i][j]] for j in range(5)] for i in range(len(self.winlines))]
+        # Maps each winline to the current viewport
+        self.winlineSymbols = [[self.viewPort[j][self.winlines[i][j]] for j in range(5)] for i in range(len(self.winlines))]
     
     def checkForWin(self, currentWinline):
         '''
@@ -119,7 +96,7 @@ class SlotGame:
         Returns: 
             Float of the win total
         ''' 
-        allWinlines = self.viewPortToWinlines()
+        allWinlines = self.winlineSymbols
         payouts = self.allPayouts(allWinlines)
         totalPay = self.retrievePayouts(payouts)
         return totalPay
