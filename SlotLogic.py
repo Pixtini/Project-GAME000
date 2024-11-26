@@ -56,16 +56,6 @@ class SlotGame:
             if payout != [0,3]:
                 self.payouts.append(payout)
                 self.totalPayout += self.paytable[payout[0]][payout[1]]
-    
-    def winInstance(self):
-        '''
-        Brings everything togethor, takes viewport and performs all steps
-        
-        Returns: 
-            Float of the win total
-        ''' 
-        self.checkForWins()
-        return self.totalPayout
 
 class Spin:  
     ''' Spin class, performs the RNG for that spin
@@ -95,7 +85,8 @@ class Spin:
     
     def spin(self):
         self.slotGame = SlotGame(self.viewPortInstance, self.paytable, self.winlines)
-        self.totalPay = self.slotGame.winInstance()
+        self.slotGame.checkForWins()
+        self.totalPay = self.slotGame.totalPayout
 
 
 
