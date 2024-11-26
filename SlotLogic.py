@@ -18,8 +18,9 @@ class SlotGame:
         self.viewPort, self.paytable, self.winlines = viewPort, paytable, winlines 
         # Maps each winline to the current viewport
         self.winlineSymbols = [[self.viewPort[j][self.winlines[i][j]] for j in range(5)] for i in range(len(self.winlines))]
+        self.payouts = []
     
-    def checkForWin(self, currentWinline):
+    def checkForWins(self):
         '''
         Takes a winline and checks it for the largest win
 
@@ -29,41 +30,31 @@ class SlotGame:
         Return: 
             Position on Paytable that is the largest win detected on that winline, [0,3] if no win
         ''' 
-        payout = [0,3]
+        for currentWinline in self.winlineSymbols:
+            payout = [0,3]
 
-        for i in range(5,2,-1): #Checks for Wild Win
-            if currentWinline[:i].count(0) == i:
-                if payout == [0,3]:
-                    payout = [0,i-3]
-                elif self.paytable[0][i-3] > self.paytable[payout[0]][payout[1]]:
-                     payout = [0,i-3]
-        
-        try:
-            firstNoneWild = [sym for sym in currentWinline if sym != 0][0]
-        except:
-            firstNoneWild = 0
-
-        if firstNoneWild != 0:
-            for i in range(5,2,-1): #Checks for Wild Wins
-                if currentWinline[:i].count(0) + currentWinline[:i].count(firstNoneWild) == i:
+            for i in range(5,2,-1): #Checks for Wild Win
+                if currentWinline[:i].count(0) == i:
                     if payout == [0,3]:
-                        payout = [firstNoneWild,i-3]
-                    elif self.paytable[firstNoneWild][i-3] > self.paytable[payout[0]][payout[1]]:
-                        payout = [firstNoneWild,i-3]
-        
-        return payout
+                        payout = [0,i-3]
+                    elif self.paytable[0][i-3] > self.paytable[payout[0]][payout[1]]:
+                        payout = [0,i-3]
+            
+            try:
+                firstNoneWild = [sym for sym in currentWinline if sym != 0][0]
+            except:
+                firstNoneWild = 0
 
-    def allPayouts(self, allWinlines):        
-        '''
-        Checks Payout for all winlines
+            if firstNoneWild != 0:
+                for i in range(5,2,-1): #Checks for Wild Wins
+                    if currentWinline[:i].count(0) + currentWinline[:i].count(firstNoneWild) == i:
+                        if payout == [0,3]:
+                            payout = [firstNoneWild,i-3]
+                        elif self.paytable[firstNoneWild][i-3] > self.paytable[payout[0]][payout[1]]:
+                            payout = [firstNoneWild,i-3]
 
-        Args:
-            allWinLines: Array that contains all the winlines
-        
-        Returns: 
-            Array of all the valid win positions
-        ''' 
-        return [self.checkForWin(winline) for winline in allWinlines if self.checkForWin(winline)[1] != 3 ]
+            if payout != [0,3]:
+                self.payouts.append(payout)
         
     def retrievePayouts(self, payouts):
         '''
@@ -82,10 +73,7 @@ class SlotGame:
     
     def freeSpinCheck(self):
         '''
-        Checks for freeSpins
-        
-        Returns: 
-            Boolean based on wether free spins or not
+        Returns Boolean based on wether free spins or not
         ''' 
         return (sum([reel.count(9) for reel in self.viewPort]) == 3)
     
@@ -96,12 +84,9 @@ class SlotGame:
         Returns: 
             Float of the win total
         ''' 
-        allWinlines = self.winlineSymbols
-        payouts = self.allPayouts(allWinlines)
-        totalPay = self.retrievePayouts(payouts)
+        self.checkForWins()
+        totalPay = self.retrievePayouts(self.payouts)
         return totalPay
-
-
 
 class Spin:  
     ''' Spin class, performs the RNG for that spin
