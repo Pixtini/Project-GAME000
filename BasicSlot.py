@@ -10,21 +10,21 @@ class Main:
         self.slotData = SlotData(config)
         self.slotData.importData()
         self.report = Report(spinCount)
+        self.baseSpin = BaseGame(self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines)
+        self.freeSpin = FreeGame(self.slotData.freeReels, self.slotData.paytable, self.slotData.winlines)
 
     def spin(self): 
-        baseSpin = BaseGame(self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines)
         #Viewport Can Be edited here
-        baseSpin.baseSpin()
-        if baseSpin.freeSpinFlag:
+        self.baseSpin.baseSpin()
+        if self.baseSpin.freeSpinFlag:
             freeSpinPay = 0
             for _ in range(int(self.slotData.freeSpinCount)):
-                freeSpin = FreeGame(self.slotData.freeReels, self.slotData.paytable, self.slotData.winlines)
                 #Viewport Can Be edited here
-                freeSpin.freeSpin()
-                freeSpinPay += freeSpin.totalPay
-            self.report.log(baseSpin.totalPay, freeSpinPay, baseSpin.freeSpinFlag)
+                self.freeSpin.freeSpin()
+                freeSpinPay += self.freeSpin.totalPay
+            self.report.log(self.baseSpin.totalPay, freeSpinPay, self.baseSpin.freeSpinFlag)
         else:
-            self.report.log(baseSpin.totalPay, 0, baseSpin.freeSpinFlag)      
+            self.report.log(self.baseSpin.totalPay, 0, self.baseSpin.freeSpinFlag)      
 
     def sim(self):
         for i in range(self.report.spinCount):  

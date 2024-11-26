@@ -11,7 +11,6 @@ class Viewport:
         #Viewport object, based on where reels stopped and screen size, can be edited later based on features.
         self.viewport = [[self.reels[i][reelstops[i]+j] for j in range(screenSize[1])] for i in range(screenSize[0])] 
 
-
 class SlotGame:
     def __init__(self, viewPort, paytable, winlines):
         self.viewPort, self.paytable, self.winlines = viewPort, paytable, winlines 
@@ -58,25 +57,15 @@ class SlotGame:
                 self.totalPayout += self.paytable[payout[0]][payout[1]]
 
 class Spin:  
-    ''' Spin class, performs the RNG for that spin
-
-    Obtains random reelstops , and then returns the current viewport instance based on those stops
-
-    Attributes:
-        reels:
-        paytable:
-        winlines:
-    '''
     def __init__(self, reels, paytable, winlines):
         self.reels, self.paytable, self.winlines = reels, paytable, winlines
-        self.randomReelStops = [random.randint(0,len(self.reels[i])-3) for i in range(5)]
-        self.viewport = Viewport(self.reels,[5,3],self.randomReelStops)
     
     def spin(self):
+        self.randomReelStops = [random.randint(0,len(self.reels[i])-3) for i in range(5)]
+        self.viewport = Viewport(self.reels,[5,3],self.randomReelStops)
         self.slotGame = SlotGame(self.viewport.viewport, self.paytable, self.winlines)
         self.slotGame.checkForWins()
         self.totalPay = self.slotGame.totalPayout
-
 
 class BaseGame(Spin):
     def __init__(self, reels, paytable, winlines):
@@ -85,8 +74,6 @@ class BaseGame(Spin):
     def baseSpin(self):
         super().spin()
         self.freeSpinFlag = self.slotGame.freeGameCheck
-
-
 
 class FreeGame(Spin):
     def __init__(self, reels, paytable, winlines):
