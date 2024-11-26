@@ -5,7 +5,6 @@ class Reels:
     def __init__(self, reels):
         self.reels = reels
  
-
 class Viewport:
     def __init__(self, reels, screenSize, reelstops):
         self.reels = reels
@@ -19,8 +18,7 @@ class SlotGame:
         # Maps each winline to the current viewport
         self.winlineSymbols = [[self.viewPort[j][self.winlines[i][j]] for j in range(5)] for i in range(len(self.winlines))]
         self.freeGameCheck = (sum([reel.count(9) for reel in self.viewPort]) == 3)
-
-        self.payouts = []
+        self.payouts, self.totalPayout = [], 0
     
     def checkForWins(self):
         '''
@@ -57,21 +55,7 @@ class SlotGame:
 
             if payout != [0,3]:
                 self.payouts.append(payout)
-        
-    def retrievePayouts(self, payouts):
-        '''
-        Collects Payouts
-
-        Args:
-            payouts: Array that contains all the payout locations
-        
-        Returns: 
-            Float value that is the total win for that current viewport
-        ''' 
-        totalPayout = 0
-        for payout in payouts:
-            totalPayout += self.paytable[payout[0]][payout[1]]
-        return totalPayout
+                self.totalPayout += self.paytable[payout[0]][payout[1]]
     
     def winInstance(self):
         '''
@@ -81,8 +65,7 @@ class SlotGame:
             Float of the win total
         ''' 
         self.checkForWins()
-        totalPay = self.retrievePayouts(self.payouts)
-        return totalPay
+        return self.totalPayout
 
 class Spin:  
     ''' Spin class, performs the RNG for that spin
