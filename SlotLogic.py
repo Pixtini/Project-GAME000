@@ -64,14 +64,19 @@ class Spin:
         self.slotData = SlotData(config)
         self.slotData.importData()
         self.reels, self.paytable, self.winlines = self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines
-
+    
     def spin(self):
         self.randomReelStops = [random.randint(0,len(self.reels[i])-3) for i in range(5)]
         self.viewport = Viewport(self.reels,[5,3],self.randomReelStops)
-    
-    def winprocess(self, viewport):
-        self.slotGame = SlotGame(viewport, self.paytable, self.winlines)
+        self.viewport.viewport = self.viewportMod(self.viewport.viewport)
+        self.slotGame = SlotGame(self.viewport.viewport, self.paytable, self.winlines)
         self.slotGame.checkForWins()
+        self.slotGame.totalPayout *= self.payoutMod()
 
+    def viewportMod(self, viewport):
+        return viewport
 
+    def payoutMod(self):
+        mod = 1 
+        return mod
     

@@ -10,34 +10,33 @@ class BaseGame(Spin):
         super().__init__()
 
     def viewportMod(self, viewport):
-        viewport[0] = [0,0,0]
-        viewport[1] = [0,0,0]
-        viewport[2] = [0,0,0]
         return viewport
+    
+    def payoutMod(self):
+        mod = 1 
+        return mod
     
     def baseSpin(self):
         super().spin()
-        self.viewport.viewport = self.viewportMod(self.viewport.viewport)
-        super().winprocess(self.viewport.viewport)
-        #payout can be modified here incase of multi etc
         self.totalPay = self.slotGame.totalPayout
         self.freeSpinFlag = self.slotGame.freeGameCheck
 
-    def viewportMod(self, viewport):
-        viewport[0] = [0,0,0]
-        viewport[1] = [0,0,0]
-        viewport[2] = [0,0,0]
-        return viewport
 
 class FreeGame(Spin):
     def __init__(self):
         super().__init__()
 
+    def viewportMod(self, viewport):
+        return viewport
+    
+    def payoutMod(self):
+        mod = 1
+        return mod
+
     def freeSpin(self):
         self.totalFreePay = 0
         for _ in range(int(self.slotData.freeSpinCount)):
             super().spin()
-            super().winprocess(self.viewport.viewport)
             self.totalFreePay += self.slotGame.totalPayout
 
 class Main:
@@ -64,5 +63,5 @@ class Main:
                 print(f"{i / (self.report.spinCount/10) }")
         self.report.reportPrint()
     
-main = Main(1000, config)
+main = Main(1000000, config)
 main.sim()
