@@ -74,5 +74,4 @@ class Spin:
         self.slotGame.checkForWins()
 
 
-
     

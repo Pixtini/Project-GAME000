@@ -3,20 +3,31 @@ from Reports import *
 from SlotLogic import *
 from SlotData import *
 
-config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"  
+config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"
 
 class BaseGame(Spin):
     def __init__(self):
         super().__init__()
+
+    def viewportMod(self, viewport):
+        viewport[0] = [0,0,0]
+        viewport[1] = [0,0,0]
+        viewport[2] = [0,0,0]
+        return viewport
     
     def baseSpin(self):
         super().spin()
-        #viewport can be edited here
-        
+        self.viewport.viewport = self.viewportMod(self.viewport.viewport)
         super().winprocess(self.viewport.viewport)
         #payout can be modified here incase of multi etc
         self.totalPay = self.slotGame.totalPayout
         self.freeSpinFlag = self.slotGame.freeGameCheck
+
+    def viewportMod(self, viewport):
+        viewport[0] = [0,0,0]
+        viewport[1] = [0,0,0]
+        viewport[2] = [0,0,0]
+        return viewport
 
 class FreeGame(Spin):
     def __init__(self):
@@ -40,7 +51,6 @@ class Main:
     def spin(self): 
 
         self.baseSpin.baseSpin()
-        
         if self.baseSpin.freeSpinFlag:
             self.freeSpin.freeSpin()
             self.report.log(self.baseSpin.totalPay, self.freeSpin.totalFreePay, self.baseSpin.freeSpinFlag)
@@ -54,5 +64,5 @@ class Main:
                 print(f"{i / (self.report.spinCount/10) }")
         self.report.reportPrint()
     
-main = Main(1000000, config)
+main = Main(1000, config)
 main.sim()
