@@ -32,6 +32,7 @@ class SlotGame:
             float of the total win
             array of each location of the paytable which the wins come from
         ''' 
+        self.payouts, self.totalPayout = [], 0
         for currentWinline in self.winlineSymbols:
             payout = [0,3] #Default for no win
 
@@ -39,27 +40,17 @@ class SlotGame:
                 if currentWinline[:i].count(0) == i: #Checks if the first i positions are wilds
                     payout = [0,i-3]
                     break
-            '''
-            for i in range(self.screenSize[0],2,-1): #Loops over possible win lengths
-                if currentWinline[:i].count(0) == i: #Checks if the first i positions are wilds
-                    if payout == [0,3]: #Sets the first win
-                        payout = [0,i-3]
-                        break
-                    elif self.paytable[0][i-3] > self.paytable[payout[0]][payout[1]]: 
-                        payout = [0,i-3]'''
-            
+
             try:
                 firstNoneWild = [sym for sym in currentWinline if sym != 0][0]
-            except:
-                firstNoneWild = 0
-
-            if firstNoneWild != 0:
                 for i in range(self.screenSize[0],2,-1): #Checks for Wild Wins
                     if currentWinline[:i].count(0) + currentWinline[:i].count(firstNoneWild) == i:
                         if payout == [0,3]:
                             payout = [firstNoneWild,i-3]
                         elif self.paytable[firstNoneWild][i-3] > self.paytable[payout[0]][payout[1]]:
                             payout = [firstNoneWild,i-3]
+            except:
+                pass
 
             if payout != [0,3]:
                 self.payouts.append(payout)
@@ -67,10 +58,10 @@ class SlotGame:
 
 
 class Spin:  
-    def __init__(self):
+    def __init__(self, reelType):
         self.slotData = SlotData(config)
         self.slotData.importData()
-        self.reels, self.paytable, self.winlines = self.slotData.baseReels, self.slotData.paytable, self.slotData.winlines
+        self.reels, self.paytable, self.winlines = reelType, self.slotData.paytable, self.slotData.winlines
     
     def spin(self):
         self.randomReelStops = [random.randint(0,len(self.reels[i])-3) for i in range(5)]

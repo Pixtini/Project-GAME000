@@ -16,12 +16,13 @@ class Report:
     
     def log(self, baseWin, freeWin, freeGameFlag):
         self.baseWin.append(baseWin)
-        if freeGameFlag:
+        if freeGameFlag == 3:
             self.freeGameCount += 1
             self.freegameWin.append(freeWin)
             self.totalWin.append(baseWin+freeWin)
         else:
             self.totalWin.append(baseWin)
+        
 
     def reportPrint(self):
         f = open(f"Report {datetime.datetime.now()}.txt", "a")

@@ -6,8 +6,8 @@ from SlotData import *
 config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"
 
 class BaseGame(Spin):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, reelType):
+        super().__init__(reelType)
     
     def baseSpin(self):
         super().spin()
@@ -16,8 +16,8 @@ class BaseGame(Spin):
 
 
 class FreeGame(Spin):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, reelType):
+        super().__init__(reelType)
 
     def freeSpin(self):
         self.totalFreePay = 0
@@ -30,14 +30,15 @@ class Main:
         self.slotData = SlotData(config)
         self.slotData.importData()
         self.report = Report(spinCount)
-        self.baseSpin = BaseGame()
-        self.freeSpin = FreeGame()
+        self.baseSpin = BaseGame(self.slotData.baseReels)
+        self.freeSpin = FreeGame(self.slotData.freeReels)
 
     def spin(self): 
         self.baseSpin.baseSpin()
         if self.baseSpin.freeSpinFlag == 3:
             self.freeSpin.freeSpin()
-            self.report.log(self.baseSpin.totalPay, self.freeSpin.totalFreePay, self.baseSpin.freeSpinFlag)
+            #self.freeSpin.totalFreePay
+            self.report.log(self.baseSpin.totalPay,self.freeSpin.totalFreePay, self.baseSpin.freeSpinFlag)
         else:
             self.report.log(self.baseSpin.totalPay, 0, self.baseSpin.freeSpinFlag)      
 
@@ -50,3 +51,4 @@ class Main:
     
 main = Main(1000000, config)
 main.sim()
+
