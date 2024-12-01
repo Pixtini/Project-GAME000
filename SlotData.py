@@ -1,19 +1,24 @@
 import pandas as pd, fnmatch
 config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 class SlotData:
     def __init__(self, config):
         self.config = config
         self.baseReels, self.freeReels, self.winlines, self.paytable = [], [], [], []
-        reelsLen = pd.read_excel(config, 'BaseReels').columns.get_loc("Reel 1.1") - 1 
-        self.reelAmount = [i for i in range(reelsLen)]
+
+    def gameDataImport(self):
+        gameData = pd.read_excel(self.config, 'GameData')
+        self.reelAmount = [i for i in range(int(gameData.loc[gameData["Type"] == "Reels", "Data"]))]
+        self.reelHeight = int(gameData.loc[gameData["Type"] == "Height", "Data"])
 
     def reelImport(self, type):
         reelsImport = pd.read_excel(self.config, type , usecols=self.reelAmount)
         reels = []
-        for i in range(5):
+        for i in range(len(self.reelAmount)):
             reel = reelsImport[f"Reel {i+1}"].values.tolist()
-            wrapping = reel[0:2]
+            wrapping = reel[0:self.reelHeight-1]
             reel.extend(wrapping)
             reels.append(reel)
         return reels
@@ -31,8 +36,11 @@ class SlotData:
         return paytableImport.values.tolist()[-1][0]
     
     def importData(self):
+        self.gameData = self.gameDataImport()
         self.baseReels = self.reelImport('BaseReels')
         self.freeReels = self.reelImport('FreeReels')
         self.winlines = self.winlineImport()
         self.paytable = self.paytableImport()
         self.freeSpinCount = self.freeSpinCountImport()
+
+
