@@ -8,13 +8,6 @@ config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"
 class BaseGame(Spin):
     def __init__(self):
         super().__init__()
-
-    def viewportMod(self, viewport):
-        return viewport
-    
-    def payoutMod(self):
-        mod = 1 
-        return mod
     
     def baseSpin(self):
         super().spin()
@@ -25,13 +18,6 @@ class BaseGame(Spin):
 class FreeGame(Spin):
     def __init__(self):
         super().__init__()
-
-    def viewportMod(self, viewport):
-        return viewport
-    
-    def payoutMod(self):
-        mod = 1
-        return mod
 
     def freeSpin(self):
         self.totalFreePay = 0
@@ -48,9 +34,8 @@ class Main:
         self.freeSpin = FreeGame()
 
     def spin(self): 
-
         self.baseSpin.baseSpin()
-        if self.baseSpin.freeSpinFlag:
+        if self.baseSpin.freeSpinFlag == 3:
             self.freeSpin.freeSpin()
             self.report.log(self.baseSpin.totalPay, self.freeSpin.totalFreePay, self.baseSpin.freeSpinFlag)
         else:
