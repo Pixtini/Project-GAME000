@@ -3,7 +3,7 @@ from Reports import *
 from SlotLogic import *
 from SlotData import *
 
-config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"
+config = "/Users/connorkelly/Documents/Work/Project-GAME000/BasicSlot.xlsx"
 
 class BaseGame(Spin): 
     def __init__(self, reelType):
@@ -30,8 +30,9 @@ class Main:
         self.slotData = SlotData(config)
         self.slotData.importData()
         self.report = Report(spinCount) #Inits the report to log later
-        self.baseSpin = BaseGame(self.slotData.baseReels)
-        self.freeSpin = FreeGame(self.slotData.freeReels)
+        #Set Selection comes before this
+        self.baseSpin = BaseGame(self.slotData.baseSets[0])
+        self.freeSpin = FreeGame(self.slotData.freeSets[0])
 
     def spin(self): 
         self.baseSpin.baseSpin()

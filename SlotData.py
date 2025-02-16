@@ -1,5 +1,5 @@
 import pandas as pd, fnmatch
-config = "/Users/connorkelly/Documents/Work/BasicSlotGame/BasicSlot.xlsx"
+config = "/Users/connorkelly/Documents/Work/Project-GAME000/BasicSlot.xlsx"
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -22,6 +22,12 @@ class SlotData:
             reel.extend(wrapping)
             reels.append(reel)
         return reels
+    
+    def sets(self, type):
+        gameData = pd.read_excel(self.config, 'GameData')
+        setCount = int(gameData.loc[gameData["Type"] == type+"_sets", "Data"])
+        sets = [self.reelImport(type+'_'+str(i)) for i in range(setCount)]
+        return sets
 
     def winlineImport(self):
         winlineImport = pd.read_excel(self.config, 'Winlines' , usecols=self.reelAmount)
@@ -37,10 +43,12 @@ class SlotData:
     
     def importData(self):
         self.gameData = self.gameDataImport()
-        self.baseReels = self.reelImport('BaseReels')
-        self.freeReels = self.reelImport('FreeReels')
         self.winlines = self.winlineImport()
         self.paytable = self.paytableImport()
         self.freeSpinCount = self.freeSpinCountImport()
+        self.baseSets = self.sets("bg")
+        self.freeSets = self.sets('fg')
+
+
 
 
