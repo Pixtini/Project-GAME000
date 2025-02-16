@@ -60,10 +60,10 @@ class SlotGame:
 
 
 class Spin:  
-    def __init__(self, reelType):
+    def __init__(self):
         self.slotData = SlotData(config)
         self.slotData.importData()
-        self.reels, self.paytable, self.winlines, self.screenSize, self.freegameSymbol = reelType, self.slotData.paytable, self.slotData.winlines, [5,3], 9   
+        self.reels, self.paytable, self.winlines, self.screenSize, self.freegameSymbol = [], self.slotData.paytable, self.slotData.winlines, [5,3], 9   
     
     def spin(self):
         self.randomReelStops = [random.randint(0,len(self.reels[i])-self.screenSize[1]) for i in range(self.screenSize[0])]  # Amount of random numbers of the screens length 

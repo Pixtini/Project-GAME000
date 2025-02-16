@@ -2,24 +2,29 @@
 from Reports import *
 from SlotLogic import *
 from SlotData import *
+import numpy as np
 
 config = "/Users/connorkelly/Documents/Work/Project-GAME000/BasicSlot.xlsx"
 
 class BaseGame(Spin): 
-    def __init__(self, reelType):
-        super().__init__(reelType)
+    def __init__(self):
+        super().__init__()
     
     def baseSpin(self):
+        self.slotData.baseSetSelection['p'] = (self.slotData.baseSetSelection.setSelectBG_weight)/(self.slotData.baseSetSelection.setSelectBG_weight.sum())
+        self.reels = self.slotData.baseSets[int(np.random.choice(self.slotData.baseSetSelection['setSelectBG'],1 ,p = self.slotData.baseSetSelection['p'], replace= False )[0])]
         super().spin() #Spin function from parent class
         self.totalPay = self.slotGame.totalPayout
         self.freeSpinFlag = self.slotGame.freeGameCheck #To check if trigger FG
 
 
 class FreeGame(Spin):
-    def __init__(self, reelType):
-        super().__init__(reelType)
+    def __init__(self):
+        super().__init__()
 
     def freeSpin(self):
+        self.slotData.freeSetSelection['p'] = (self.slotData.freeSetSelection.setSelectFG_weight)/(self.slotData.freeSetSelection.setSelectFG_weight.sum())
+        self.reels = self.slotData.freeSets[int(np.random.choice(self.slotData.freeSetSelection['setSelectFG'],1 ,p = self.slotData.freeSetSelection['p'], replace= False )[0])]
         self.totalFreePay = 0 
         for _ in range(int(self.slotData.freeSpinCount)):
             super().spin()
@@ -30,9 +35,8 @@ class Main:
         self.slotData = SlotData(config)
         self.slotData.importData()
         self.report = Report(spinCount) #Inits the report to log later
-        #Set Selection comes before this
-        self.baseSpin = BaseGame(self.slotData.baseSets[0])
-        self.freeSpin = FreeGame(self.slotData.freeSets[0])
+        self.baseSpin = BaseGame()
+        self.freeSpin = FreeGame()
 
     def spin(self): 
         self.baseSpin.baseSpin()

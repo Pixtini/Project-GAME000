@@ -1,4 +1,5 @@
 import pandas as pd, fnmatch
+
 config = "/Users/connorkelly/Documents/Work/Project-GAME000/BasicSlot.xlsx"
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -22,6 +23,10 @@ class SlotData:
             reel.extend(wrapping)
             reels.append(reel)
         return reels
+    
+    def weightTable(self, sheet ,row, cols):
+        wt = pd.read_excel(config, sheet_name=sheet, header=row, usecols=cols).dropna()
+        return wt
     
     def sets(self, type):
         gameData = pd.read_excel(self.config, 'GameData')
@@ -48,7 +53,9 @@ class SlotData:
         self.freeSpinCount = self.freeSpinCountImport()
         self.baseSets = self.sets("bg")
         self.freeSets = self.sets('fg')
-
+        
+        self.baseSetSelection = self.weightTable('Total Game', 1, 'H:I')
+        self.freeSetSelection = self.weightTable('Total Game', 1, 'L:M')
 
 
 
