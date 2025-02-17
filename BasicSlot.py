@@ -23,10 +23,10 @@ class FreeGame(Spin):
         super().__init__()
 
     def freeSpin(self):
-        self.slotData.freeSetSelection['p'] = (self.slotData.freeSetSelection.setSelectFG_weight)/(self.slotData.freeSetSelection.setSelectFG_weight.sum())
-        self.reels = self.slotData.freeSets[int(np.random.choice(self.slotData.freeSetSelection['setSelectFG'],1 ,p = self.slotData.freeSetSelection['p'], replace= False )[0])]
         self.totalFreePay = 0 
         for _ in range(int(self.slotData.freeSpinCount)):
+            self.slotData.freeSetSelection['p'] = (self.slotData.freeSetSelection.setSelectFG_weight)/(self.slotData.freeSetSelection.setSelectFG_weight.sum())
+            self.reels = self.slotData.freeSets[int(np.random.choice(self.slotData.freeSetSelection['setSelectFG'],1 ,p = self.slotData.freeSetSelection['p'], replace= False )[0])]
             super().spin()
             self.totalFreePay += self.slotGame.totalPayout
 
