@@ -1,6 +1,7 @@
 import random
 from Reports import Report
 from SlotData import *
+import numpy as np
 config = "/Users/connorkelly/Documents/Work/Project-GAME000/BasicSlot.xlsx"
 
 class Reels:
@@ -63,7 +64,7 @@ class Spin:
     def __init__(self):
         self.slotData = SlotData(config)
         self.slotData.importData()
-        self.reels, self.paytable, self.winlines, self.screenSize, self.freegameSymbol = [], self.slotData.paytable, self.slotData.winlines, [5,3], 9   
+        self.reels, self.paytable, self.winlines, self.screenSize, self.freegameSymbol = [], self.slotData.paytable, self.slotData.winlines, [5,3], self.slotData.freeSpinCount[0]  
     
     def spin(self):
         self.randomReelStops = [random.randint(0,len(self.reels[i])-self.screenSize[1]) for i in range(self.screenSize[0])]  # Amount of random numbers of the screens length 
@@ -85,4 +86,8 @@ class Spin:
         ''' 
         mod = 1 
         return mod
+    
+    def symCount(self, sym):
+        return sum([reel.count(sym) for reel in self.viewport.viewport])
+        
     

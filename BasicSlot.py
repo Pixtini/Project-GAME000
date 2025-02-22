@@ -13,6 +13,7 @@ class BaseGame(Spin):
     def baseSpin(self):
         self.slotData.baseSetSelection['p'] = (self.slotData.baseSetSelection.setSelectBG_weight)/(self.slotData.baseSetSelection.setSelectBG_weight.sum())
         self.reels = self.slotData.baseSets[int(np.random.choice(self.slotData.baseSetSelection['setSelectBG'],1 ,p = self.slotData.baseSetSelection['p'], replace= False )[0])]
+        
         super().spin() #Spin function from parent class
         self.totalPay = self.slotGame.totalPayout
         self.freeSpinFlag = self.slotGame.freeGameCheck #To check if trigger FG
@@ -24,13 +25,13 @@ class FreeGame(Spin):
 
     def freeSpin(self):
         self.totalFreePay = 0 
-        for _ in range(int(self.slotData.freeSpinCount)):
+        for _ in range(int(self.slotData.freeSpinCount[1])):
             self.slotData.freeSetSelection['p'] = (self.slotData.freeSetSelection.setSelectFG_weight)/(self.slotData.freeSetSelection.setSelectFG_weight.sum())
             self.reels = self.slotData.freeSets[int(np.random.choice(self.slotData.freeSetSelection['setSelectFG'],1 ,p = self.slotData.freeSetSelection['p'], replace= False )[0])]
             super().spin()
             self.totalFreePay += self.slotGame.totalPayout
 
-class Main:
+class MainGame:
     def __init__(self, spinCount, config):
         self.slotData = SlotData(config)
         self.slotData.importData()
@@ -44,7 +45,10 @@ class Main:
             self.freeSpin.freeSpin()
             self.report.log(self.baseSpin.totalPay, self.freeSpin.totalFreePay, self.baseSpin.freeSpinFlag) #Logs data, to be printed into the report
         else:
-            self.report.log(self.baseSpin.totalPay, 0, self.baseSpin.freeSpinFlag)  # Zero for no free game pay  
+            self.report.log(self.baseSpin.totalPay, 0, self.baseSpin.freeSpinFlag)  # Zero for no free game pay 
+        
+        events = [self.baseSpin.totalPay, self.baseSpin.viewport.viewport]
+        return events
 
     def sim(self):
         for i in range(self.report.spinCount):  
@@ -53,6 +57,6 @@ class Main:
                 print(f"{i / (self.report.spinCount/10) }")
         self.report.reportPrint()
     
-main = Main(1000000, config)
-main.sim()
+main = MainGame(1, config)
+
 
