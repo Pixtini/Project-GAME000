@@ -32,23 +32,28 @@ def drawWinline(surface, color, rect):
     pygame.draw.rect(shape_surf, color, shape_surf.get_rect())
     surface.blit(shape_surf, rect)
 
-def winDisplay(win):
+def winDisplay(win, freeGame, spinCount):
     font = pygame.font.SysFont('freesanbold.ttf', 25)
-    winText = font.render('Total Win = £' + str(win), True, (0, 255, 0))
+    if freeGame:
+        winText = font.render('Total FREE Win = £' + str(win) + " Spin Count : " + str(spinCount) + "/5", True, (0, 255, 0))
+    else:
+        winText = font.render('Total Win = £' + str(win), True, (0, 255, 0))
     textRect = winText.get_rect()
-    textRect.center = (100, 475)
+    textRect.center = (200, 475)
     scrn.blit(winText, textRect)
 
 
-    main = MainGame(1, config)
-    main.spin()
-def gameLoop(pay, viewport, winlines):
+
+def gameLoop(pay, viewport, winlines, freeGame, totalFreeGamePay, freeSpinNum):
     scrn.fill([0,0,0])
-    winDisplay(pay)
     symbolLoad(viewport)
     winlineLoad(winlines)
+    if freeGame:
+        winDisplay(totalFreeGamePay, True, freeSpinNum)
+    else:
+        winDisplay(pay, False, 0)
     pygame.display.flip()
-    pygame.time.wait(5000)
+    pygame.time.wait(3000)
 
 
 
@@ -64,9 +69,9 @@ while (status):
                 scrn.fill([0,0,0])
                 main = MainGame(1, config)
                 main.spin()
-                gameLoop(main.baseSpin.baseEvents.basePay, main.baseSpin.baseEvents.baseViewport, main.baseSpin.baseEvents.baseActiveWinlines)
+                gameLoop(main.baseSpin.baseEvents.basePay, main.baseSpin.baseEvents.baseViewport, main.baseSpin.baseEvents.baseActiveWinlines, False, 0, 0)
                 pygame.display.flip()
-                pygame.time.wait(5000)
+                pygame.time.wait(800)
                 
                 if(main.baseSpin.baseEvents.freeSpinFlag):
                     scrn.fill([0,0,0])
@@ -76,7 +81,14 @@ while (status):
                     textRect.center = (200, 275)
                     scrn.blit(winText, textRect)
                     pygame.display.flip()
-                    pygame.time.wait(5000)
+                    pygame.time.wait(800)
+
+                    totalFreeGamePay = 0
+                    for i in range(int(main.slotData.freeSpinCount[1])):
+                        totalFreeGamePay += main.freeSpin.freeEvents.freePay[i]
+                        gameLoop(main.freeSpin.freeEvents.freePay[i], main.freeSpin.freeEvents.freeViewport[i], main.freeSpin.freeEvents.freeActiveWinlines[i], True, totalFreeGamePay, i+1)
+                        pygame.display.flip()
+                        
 
 
 
