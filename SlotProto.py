@@ -42,8 +42,6 @@ def winDisplay(win, freeGame, spinCount):
     textRect.center = (200, 475)
     scrn.blit(winText, textRect)
 
-
-
 def gameLoop(pay, viewport, winlines, freeGame, totalFreeGamePay, freeSpinNum):
     scrn.fill([0,0,0])
     symbolLoad(viewport)
