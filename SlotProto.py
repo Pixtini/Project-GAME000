@@ -27,11 +27,6 @@ def winlineLoad(activeWinlines):
             pygame.draw.line(scrn, (0,255,0), (75,375), (375,75), width=6)
             pygame.draw.line(scrn, (0,255,0), (375,75), (675,375), width=6)
 
-def drawWinline(surface, color, rect):
-    shape_surf = pygame.Surface(pygame.Rect(rect).size)
-    pygame.draw.rect(shape_surf, color, shape_surf.get_rect())
-    surface.blit(shape_surf, rect)
-
 def winDisplay(win, freeGame, spinCount):
     font = pygame.font.SysFont('freesanbold.ttf', 25)
     if freeGame:
